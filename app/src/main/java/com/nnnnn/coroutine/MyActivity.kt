@@ -13,9 +13,9 @@ class MyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Log.d("EE", "1 currentThread = ${Thread.currentThread()}")
+        //Log.d("EE", "1 currentThread = ${Thread.currentThread()}")
         lifecycleScope.launch(Dispatchers.Main) {
-            Log.d("EE", "2 currentThread = ${Thread.currentThread()}")
+            //Log.d("EE", "2 currentThread = ${Thread.currentThread()}")
             myLaunch()
         }
 
@@ -55,11 +55,11 @@ class MyActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launch(Dispatchers.IO) {
-            Log.d("EE", "START")
+           // Log.d("EE", "START")
             val result = fetchContent()
-            Log.d("EE", "RESULT = $result")
+            //Log.d("EE", "RESULT = $result")
         }
-        Log.d("EE", "POSLE")
+        //Log.d("EE", "POSLE")
 
         val myFlow: Flow<Int> = flow {
             emit(4)
@@ -69,8 +69,24 @@ class MyActivity : AppCompatActivity() {
             it
         }.filter {
             true
-        }.collect {
+        }
 
+        lifecycleScope.launch {
+            myFlow
+                .catch { }
+                .collect { }
+        }
+
+        val remoteDataSource = RemoteDataSource()
+        val localDataSource = LocalDataSource()
+        val repository = Repository(remoteDataSource, localDataSource)
+
+        lifecycleScope.launch {
+            repository.getList()
+                .catch {  }
+                .collect {
+                    Log.d("EE", "${it}")
+                }
         }
     }
 
