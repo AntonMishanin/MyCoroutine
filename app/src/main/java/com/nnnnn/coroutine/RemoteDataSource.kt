@@ -13,4 +13,8 @@ class RemoteDataSource {
         delay(timeMillis = 3_000L)
         return listOf(1, 3, 5, 7)
     }
+
+    suspend fun setLikeToStoryById(id: String, token: String){
+        delay(timeMillis = 3_000L)
+    }
 }

@@ -81,13 +81,33 @@ class MyActivity : AppCompatActivity() {
         val localDataSource = LocalDataSource()
         val repository = Repository(remoteDataSource, localDataSource)
 
+       //lifecycleScope.launch {
+       //    repository.getList()
+       //        .catch {  }
+       //        .collect {
+       //            Log.d("EE", "${it}")
+       //        }
+       //}
+
         lifecycleScope.launch {
-            repository.getList()
-                .catch {  }
-                .collect {
-                    Log.d("EE", "${it}")
-                }
+            Log.d("EE", "START VALUE")
+            val result = repository.getValue()
+            Log.d("EE", "result")
         }
+
+        test{
+
+           "TEST"
+        }
+
+        lifecycleScope.launch {
+            val result = repository.setStoryViewed()
+        }
+    }
+
+    fun test(callback: (Int)-> String){
+       val myString = callback(4)
+        Log.d("EE", "myString = $myString")
     }
 
     private suspend fun fetchContent(): Int {
